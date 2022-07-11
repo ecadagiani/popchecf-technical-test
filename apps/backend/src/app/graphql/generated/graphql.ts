@@ -25,10 +25,66 @@ export type Scalars = {
   Float: number;
 };
 
+export type Ingredient = {
+  __typename?: 'Ingredient';
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addIngredient?: Maybe<Recipe>;
+  createIngredient?: Maybe<Ingredient>;
+  createRecipe?: Maybe<Recipe>;
+  removeIngredient?: Maybe<Recipe>;
+  updateIngredient?: Maybe<Ingredient>;
+  updateRecipe?: Maybe<Recipe>;
+};
+
+export type MutationAddIngredientArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  ingredientId?: InputMaybe<Scalars['ID']>;
+  peopleNumber?: InputMaybe<Scalars['Int']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+export type MutationCreateIngredientArgs = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type MutationCreateRecipeArgs = {
+  content?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type MutationRemoveIngredientArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  ingredientId?: InputMaybe<Scalars['ID']>;
+  peopleNumber?: InputMaybe<Scalars['Int']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+export type MutationUpdateIngredientArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type MutationUpdateRecipeArgs = {
+  content?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  ingredient?: Maybe<Ingredient>;
+  ingredients?: Maybe<Array<Ingredient>>;
   recipe?: Maybe<Recipe>;
   recipes?: Maybe<Array<Recipe>>;
+};
+
+export type QueryIngredientArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryRecipeArgs = {
@@ -37,7 +93,17 @@ export type QueryRecipeArgs = {
 
 export type Recipe = {
   __typename?: 'Recipe';
+  content?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
+  ingredients?: Maybe<Array<Maybe<RecipeIngredient>>>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type RecipeIngredient = {
+  __typename?: 'RecipeIngredient';
+  ingredient?: Maybe<Ingredient>;
+  peopleNumber?: Maybe<Scalars['Int']>;
+  quantity?: Maybe<Scalars['Int']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -152,8 +218,12 @@ export type DirectiveResolverFn<
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Ingredient: ResolverTypeWrapper<Ingredient>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Recipe: ResolverTypeWrapper<Recipe>;
+  RecipeIngredient: ResolverTypeWrapper<RecipeIngredient>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
@@ -161,15 +231,81 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
+  Ingredient: Ingredient;
+  Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
   Recipe: Recipe;
+  RecipeIngredient: RecipeIngredient;
   String: Scalars['String'];
+}>;
+
+export type IngredientResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Ingredient'] = ResolversParentTypes['Ingredient']
+> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = ResolversObject<{
+  addIngredient?: Resolver<
+    Maybe<ResolversTypes['Recipe']>,
+    ParentType,
+    ContextType,
+    Partial<MutationAddIngredientArgs>
+  >;
+  createIngredient?: Resolver<
+    Maybe<ResolversTypes['Ingredient']>,
+    ParentType,
+    ContextType,
+    Partial<MutationCreateIngredientArgs>
+  >;
+  createRecipe?: Resolver<
+    Maybe<ResolversTypes['Recipe']>,
+    ParentType,
+    ContextType,
+    Partial<MutationCreateRecipeArgs>
+  >;
+  removeIngredient?: Resolver<
+    Maybe<ResolversTypes['Recipe']>,
+    ParentType,
+    ContextType,
+    Partial<MutationRemoveIngredientArgs>
+  >;
+  updateIngredient?: Resolver<
+    Maybe<ResolversTypes['Ingredient']>,
+    ParentType,
+    ContextType,
+    Partial<MutationUpdateIngredientArgs>
+  >;
+  updateRecipe?: Resolver<
+    Maybe<ResolversTypes['Recipe']>,
+    ParentType,
+    ContextType,
+    Partial<MutationUpdateRecipeArgs>
+  >;
 }>;
 
 export type QueryResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = ResolversObject<{
+  ingredient?: Resolver<
+    Maybe<ResolversTypes['Ingredient']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryIngredientArgs, 'id'>
+  >;
+  ingredients?: Resolver<
+    Maybe<Array<ResolversTypes['Ingredient']>>,
+    ParentType,
+    ContextType
+  >;
   recipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
@@ -187,11 +323,39 @@ export type RecipeResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Recipe'] = ResolversParentTypes['Recipe']
 > = ResolversObject<{
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  ingredients?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['RecipeIngredient']>>>,
+    ParentType,
+    ContextType
+  >;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RecipeIngredientResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['RecipeIngredient'] = ResolversParentTypes['RecipeIngredient']
+> = ResolversObject<{
+  ingredient?: Resolver<
+    Maybe<ResolversTypes['Ingredient']>,
+    ParentType,
+    ContextType
+  >;
+  peopleNumber?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >;
+  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Ingredient?: IngredientResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Recipe?: RecipeResolvers<ContextType>;
+  RecipeIngredient?: RecipeIngredientResolvers<ContextType>;
 }>;

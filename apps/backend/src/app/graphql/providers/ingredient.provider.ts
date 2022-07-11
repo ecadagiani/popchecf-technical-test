@@ -1,13 +1,6 @@
 import { DataSource } from 'apollo-datasource';
-import { QueryRecipeArgs } from '../generated/graphql';
+import { QueryRecipeArgs, MutationCreateIngredientArgs, MutationUpdateIngredientArgs } from '../generated/graphql';
 import { Ingredient } from '../../entities/ingredient.entity';
-
-
-interface createIngredientArgs {
-  name: string
-}
-
-interface updateIngredientArgs extends createIngredientArgs, QueryRecipeArgs{}
 
 
 /**
@@ -26,14 +19,14 @@ export class IngredientProvider extends DataSource {
     return ingredients;
   }
 
-  public async createIngredient({name}: createIngredientArgs) {
+  public async createIngredient({name}: MutationCreateIngredientArgs) {
     const ingredient = new Ingredient()
     ingredient.name = name;
     await ingredient.save();
     return ingredient;
   }
 
-  public async updateIngredient({id, name}: updateIngredientArgs) {
+  public async updateIngredient({id, name}: MutationUpdateIngredientArgs) {
     const ingredient = await Ingredient.findOneBy({id});
     ingredient.name = name;
     await ingredient.save();
