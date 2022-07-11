@@ -1,0 +1,15 @@
+overwrite: true
+schema: 'src/app/graphql/typeDefs/**/*.{ts,js}'
+generates:
+  src/app/graphql/generated/graphql.ts:
+    config:
+      contextType: '../dataSources#Context'
+      useIndexSignature: true
+    plugins:
+      - add:
+          content:
+            - '/* eslint-disable @typescript-eslint/ban-types */'
+            - '/* eslint-disable @typescript-eslint/no-explicit-any */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-resolvers'

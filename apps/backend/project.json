@@ -1,0 +1,100 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/backend",
+        "main": "apps/backend/src/main.ts",
+        "tsConfig": "apps/backend/tsconfig.app.json",
+        "assets": ["apps/backend/src/assets"],
+        "webpackConfig": "apps/frontend/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/backend/src/environments/environment.ts",
+              "with": "apps/backend/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "backend:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/backend/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/backend"],
+      "options": {
+        "jestConfig": "apps/backend/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "graphql-codegen": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx graphql-codegen --config codegen.yml",
+        "cwd": "apps/backend"
+      }
+    },
+    "generate-migration": {
+      "builder": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.app.json ../../node_modules/.bin/typeorm migration:generate --pretty -d ./src/app/services/Database",
+        "cwd": "apps/backend"
+      }
+    },
+    "create-migration": {
+      "builder": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "../../node_modules/.bin/env-cmd -f .env.local  ts-node --project tsconfig.app.json ../../node_modules/.bin/typeorm migration:create",
+        "cwd": "apps/backend"
+      }
+    },
+    "run-migration": {
+      "builder": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "../../node_modules/.bin/env-cmd -f .env.local ts-node --project tsconfig.app.json ../../node_modules/.bin/typeorm migration:run -d ./src/app/services/Database",
+        "cwd": "apps/backend"
+      }
+    },
+    "revert-migration": {
+      "builder": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "../../node_modules/.bin/env-cmd -f .env.local ts-node --project tsconfig.app.json ../../node_modules/.bin/typeorm migration:revert -d ./src/app/services/Database",
+        "cwd": "apps/backend"
+      }
+    },
+    "drop-schema": {
+      "builder": "@nrwl/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "../../node_modules/.bin/env-cmd -f .env.local ts-node  --project tsconfig.app.json ../../node_modules/.bin/typeorm schema:drop -d ./src/app/services/Database",
+        "cwd": "apps/backend"
+      }
+    }
+  },
+  "tags": []
+}

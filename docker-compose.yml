@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  # React App
+  frontend:
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
+    command: npm run start:frontend
+    ports:
+      - 4200:4200
+
+  # Express App
+  api:
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
+    command: npm run start:backend
+    ports:
+      - 3333:3333 # API Entry port
+      - 4311:4311 # Server Debugging port
+
+  db:
+    image: postgres:14.1-alpine
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    cap_add:
+      - SYS_NICE
+    healthcheck:
+      test: pg_isready
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    ports:
+      - '4242:5432'
+    restart: unless-stopped
+    volumes:
+      - postgres:/data/postgres
+
+volumes:
+  postgres:
+  mono-node-modules: null
