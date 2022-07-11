@@ -13,5 +13,5 @@ export class Recipe extends BaseEntity {
   content: string;
 
   @OneToMany(() => RecipeHasIngredient, recipeHasIngredient => recipeHasIngredient.ingredient)
-  recipeHasIngredient: RecipeHasIngredient[];
+  ingredients: RecipeHasIngredient[];
 }

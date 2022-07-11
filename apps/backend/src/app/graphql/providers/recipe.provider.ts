@@ -1,15 +1,25 @@
 import { DataSource } from 'apollo-datasource';
-import { QueryRecipeArgs } from '../generated/graphql';
+import { QueryRecipeArgs, Scalars } from '../generated/graphql';
 import { Recipe } from '../../entities/recipe.entity';
+import { Ingredient } from '../../entities/ingredient.entity';
+import { RecipeHasIngredient } from '../../entities/recipeHasIngredient.entity';
 
 interface createRecipeArgs {
-    title: string,
-    content: string
+    title: string;
+    content: string;
 }
 
 interface updateRecipeArgs extends QueryRecipeArgs{
-  title?: string,
-  content?: string
+  title?: string;
+  content?: string;
+}
+interface addIngredientArgs extends QueryRecipeArgs{
+  ingredientId: Scalars['ID'];
+  quantity?: number;
+  peopleNumber?: number;
+}
+interface removeIngredientArgs extends QueryRecipeArgs{
+  ingredientId: Scalars['ID'];
 }
 
 /**
@@ -19,12 +29,15 @@ interface updateRecipeArgs extends QueryRecipeArgs{
  */
 export class RecipesProvider extends DataSource {
   public async getRecipe({ id }: QueryRecipeArgs) {
-    const recipe = await Recipe.findOneBy({id});
-    return recipe;
+    const recipes = await Recipe.find({
+      where: { id },
+      relations: ["ingredients", "ingredients.ingredient"]
+    });
+    return recipes[0];
   }
 
   public async getRecipes() {
-    const recipes = await Recipe.find();
+    const recipes = await Recipe.find({ relations: ["ingredients", "ingredients.ingredient"] });
     return recipes;
   }
 
@@ -38,11 +51,46 @@ export class RecipesProvider extends DataSource {
   }
 
   public async updateRecipe({id, title, content}: updateRecipeArgs) {
-    const recipe = await Recipe.findOneBy({id});
+    const recipes = await Recipe.find({
+      where: { id },
+      relations: ["ingredients", "ingredients.ingredient"]
+    });
+    const recipe = recipes[0];
     if(title)
       recipe.title = title;
     if(content)
       recipe.content = content;
+    await recipe.save();
+    return recipe;
+  }
+
+
+  public async addIngredient({id, ingredientId, quantity, peopleNumber}: addIngredientArgs) {
+    // todo: bug: ingredient is not added to recipe
+    const recipe = await Recipe.findOneBy({id});
+    const ingredient = await Ingredient.findOneBy({id: ingredientId});
+
+    const recipeIngredient = new RecipeHasIngredient();
+    recipeIngredient.recipe = recipe;
+    recipeIngredient.ingredient = ingredient;
+    if(quantity)
+      recipeIngredient.quantity = quantity
+    if(peopleNumber)
+      recipeIngredient.peopleNumber = peopleNumber
+
+    await recipeIngredient.save();
+    return this.getRecipe({id});
+  }
+
+  public async removeIngredient({id, ingredientId}: removeIngredientArgs) {
+    // toto: not tested
+    const recipes = await Recipe.find({
+      where: { id },
+      relations: ["ingredients", "ingredients.ingredient"]
+    });
+    const recipe : Recipe = recipes[0];
+    recipe.ingredients = recipe.ingredients.filter(ingredientRecipe => ingredientRecipe.ingredient.id !== ingredientId);
+
     await recipe.save();
     return recipe;
   }

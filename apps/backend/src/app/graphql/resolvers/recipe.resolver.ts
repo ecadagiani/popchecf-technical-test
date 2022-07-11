@@ -3,7 +3,7 @@ import { QueryResolvers } from '../generated/graphql';
 // Resolvers define the technique for fetching the types in the schema.
 export const RecipeResolver: {
   Query: Pick<QueryResolvers, 'recipe' | 'recipes'>;
-  Mutation: Pick<QueryResolvers, 'createRecipe' | 'updateRecipe'>;
+  Mutation: Pick<QueryResolvers, 'createRecipe' | 'updateRecipe' | 'addIngredient' | 'removeIngredient'>;
 } = {
   Query: {
     recipe: (_, args, ctx) => ctx.dataSources.recipes.getRecipe(args),
@@ -12,5 +12,7 @@ export const RecipeResolver: {
   Mutation: {
     createRecipe: (_, args, ctx) => ctx.dataSources.recipes.createRecipe(args),
     updateRecipe: (_, args, ctx) => ctx.dataSources.recipes.updateRecipe(args),
+    addIngredient: (_, args, ctx) => ctx.dataSources.recipes.addIngredient(args),
+    removeIngredient: (_, args, ctx) => ctx.dataSources.recipes.removeIngredient(args),
   },
 };

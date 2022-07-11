@@ -17,7 +17,7 @@ export class RecipeHasIngredient extends BaseEntity {
   @JoinTable()
   ingredient: Ingredient
 
-  @ManyToOne( () => Recipe, recipe => recipe.recipeHasIngredient)
+  @ManyToOne( () => Recipe, recipe => recipe.ingredients)
   @JoinTable()
   recipe: Recipe
 }
