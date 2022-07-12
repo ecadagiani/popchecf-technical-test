@@ -65,6 +65,7 @@ export class RecipesProvider extends DataSource {
     if (quantity) recipeIngredient.quantity = quantity;
     if (peopleNumber) recipeIngredient.peopleNumber = peopleNumber;
 
+    await recipeIngredient.save();
     recipe.ingredients.push(recipeIngredient);
     await recipe.save();
     console.log(recipe);
