@@ -31,12 +31,24 @@ export class RecipesProvider extends DataSource {
     return recipes;
   }
 
-  public async createRecipe({ title, content }: MutationCreateRecipeArgs) {
+  public async createRecipe({ title, content, ingredients }: MutationCreateRecipeArgs) {
     const recipe = new Recipe();
     recipe.title = title;
     recipe.content = content;
     await recipe.save();
-    return recipe;
+    
+    if(ingredients){
+      await Promise.all(ingredients.map(ingredient => (
+        this.addIngredientToRecipe({
+          id: recipe.id,
+          ingredientId: ingredient.id,
+          quantity: ingredient.quantity,
+          peopleNumber: ingredient.peopleNumber,
+        })
+      )));
+    }
+
+    return this.getRecipe({ id: recipe.id });
   }
 
   public async updateRecipe({ id, title, content }: MutationUpdateRecipeArgs) {

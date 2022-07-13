@@ -6,7 +6,7 @@ export const IngredientTypeDefs = gql`
     name: String
   }
   type Mutation {
-    createIngredient(name: String): Ingredient
-    updateIngredient(id: ID, name: String): Ingredient
+    createIngredient(name: String!): Ingredient
+    updateIngredient(id: ID!, name: String): Ingredient
   }
 `;

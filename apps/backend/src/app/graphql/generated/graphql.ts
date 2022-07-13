@@ -25,6 +25,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type CreateRecipeIngredient = {
+  id: Scalars['ID'];
+  peopleNumber?: InputMaybe<Scalars['Int']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
 export type Ingredient = {
   __typename?: 'Ingredient';
   id?: Maybe<Scalars['ID']>;
@@ -49,11 +55,12 @@ export type MutationAddIngredientToRecipeArgs = {
 };
 
 export type MutationCreateIngredientArgs = {
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type MutationCreateRecipeArgs = {
   content: Scalars['String'];
+  ingredients?: InputMaybe<Array<InputMaybe<CreateRecipeIngredient>>>;
   title: Scalars['String'];
 };
 
@@ -63,14 +70,14 @@ export type MutationRemoveIngredientToRecipeArgs = {
 };
 
 export type MutationUpdateIngredientArgs = {
-  id?: InputMaybe<Scalars['ID']>;
+  id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
 };
 
 export type MutationUpdateRecipeArgs = {
-  content: Scalars['String'];
+  content?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
-  title: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -215,6 +222,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateRecipeIngredient: CreateRecipeIngredient;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Ingredient: ResolverTypeWrapper<Ingredient>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -228,6 +236,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
+  CreateRecipeIngredient: CreateRecipeIngredient;
   ID: Scalars['ID'];
   Ingredient: Ingredient;
   Int: Scalars['Int'];
@@ -261,7 +270,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Ingredient']>,
     ParentType,
     ContextType,
-    Partial<MutationCreateIngredientArgs>
+    RequireFields<MutationCreateIngredientArgs, 'name'>
   >;
   createRecipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
@@ -279,13 +288,13 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Ingredient']>,
     ParentType,
     ContextType,
-    Partial<MutationUpdateIngredientArgs>
+    RequireFields<MutationUpdateIngredientArgs, 'id'>
   >;
   updateRecipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateRecipeArgs, 'content' | 'id' | 'title'>
+    RequireFields<MutationUpdateRecipeArgs, 'id'>
   >;
 }>;
 

@@ -12,9 +12,18 @@ export const RecipeTypeDefs = gql`
     content: String
     ingredients: [RecipeIngredient]
   }
+  input CreateRecipeIngredient {
+    id: ID!
+    quantity: Int
+    peopleNumber: Int
+  }
   type Mutation {
-    createRecipe(title: String!, content: String!): Recipe
-    updateRecipe(id: ID!, title: String!, content: String!): Recipe
+    createRecipe(
+      title: String!
+      content: String!
+      ingredients: [CreateRecipeIngredient]
+    ): Recipe
+    updateRecipe(id: ID!, title: String, content: String): Recipe
     addIngredientToRecipe(
       id: ID!
       ingredientId: ID!

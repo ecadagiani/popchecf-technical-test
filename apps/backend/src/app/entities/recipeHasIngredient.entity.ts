@@ -13,10 +13,14 @@ export class RecipeHasIngredient extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   quantity?: number;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   peopleNumber?: number;
 
   @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeHasIngredient)
