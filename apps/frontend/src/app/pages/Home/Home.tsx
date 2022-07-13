@@ -1,24 +1,34 @@
 import { FC } from 'react';
-import { useQuery } from '@apollo/client';
 
-import { GetRecipeQuery } from 'app/shared/graphql/queries/recipe.query';
 import UISpinner from 'app/components/UI/UISpinner';
+import Recipe from 'app/components/Recipe/Recipe';
+import Container from 'app/components/Container/Container';
+import { useGetRecipes } from 'app/hooks/query/useGetRecipes';
 
 const Home: FC = () => {
   // This an example of how to execute query GraphQL API
-  const { data, loading } = useQuery(GetRecipeQuery, {
-    variables: {
-      id: '1',
-    },
-    fetchPolicy: 'no-cache',
-  });
+  const { data, loading } = useGetRecipes();
 
   return (
-    <div id="Home">
-      <br />
+    <main id="Home">
       {loading && <UISpinner />}
-      {!loading && data?.recipe && <div>Recipe {data.recipe.id}</div>}
-    </div>
+      {!loading && data?.recipes && (
+      <Container>
+        {data.recipes.map(recipe => (
+          <Recipe
+            key={recipe.id}
+            title={recipe.title}
+            content={recipe.content}
+            ingredients={recipe.ingredients.map((recipeIngredient) => ({
+              quantity: recipeIngredient.quantity,
+              peopleNumber: recipeIngredient.peopleNumber,
+              name: recipeIngredient.ingredient.name,
+            }))}
+          />
+        ))}
+      </Container>
+      )}
+    </main>
   );
 };
 

@@ -7,6 +7,7 @@ import { apolloClient } from './services/graphql';
 import Home from './pages/Home/Home';
 import PageLayout from './components/PageLayout/PageLayout';
 import 'tailwindcss/tailwind.css';
+import Recipe from './pages/Recipe/Recipe';
 
 export function App() {
   const client = useMemo(() => apolloClient(), []);
@@ -21,6 +22,7 @@ export function App() {
           <Route path="/" element={<PageLayout />}>
             <Route index element={<Home />} />
           </Route>
+          <Route path="/recipe/:id" element={<Recipe/>} />
         </Routes>
       </ApolloProvider>
     </div>
