@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nx-app-base:
-    restart: always
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
