@@ -7,6 +7,7 @@ export const RecipeResolver: {
     QueryResolvers,
     | 'createRecipe'
     | 'updateRecipe'
+    | 'removeRecipe'
     | 'addIngredientToRecipe'
     | 'removeIngredientToRecipe'
   >;
@@ -18,6 +19,7 @@ export const RecipeResolver: {
   Mutation: {
     createRecipe: (_, args, ctx) => ctx.dataSources.recipes.createRecipe(args),
     updateRecipe: (_, args, ctx) => ctx.dataSources.recipes.updateRecipe(args),
+    removeRecipe: (_, args, ctx) => ctx.dataSources.recipes.removeRecipe(args),
     addIngredientToRecipe: (_, args, ctx) =>
       ctx.dataSources.recipes.addIngredientToRecipe(args),
     removeIngredientToRecipe: (_, args, ctx) =>

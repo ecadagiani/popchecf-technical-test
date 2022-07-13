@@ -14,18 +14,22 @@ export class RecipeHasIngredient extends BaseEntity {
   id: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   quantity?: number;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   peopleNumber?: number;
 
-  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeHasIngredient)
+  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeHasIngredient, {
+    onDelete: 'CASCADE',
+  })
   ingredient: Ingredient;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients, {
+    onDelete: 'CASCADE',
+  })
   recipe: Recipe;
 }

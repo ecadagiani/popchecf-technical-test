@@ -1,7 +1,11 @@
 import { DataSource } from 'apollo-datasource';
-import { QueryRecipeArgs, MutationCreateIngredientArgs, MutationUpdateIngredientArgs } from '../generated/graphql';
+import {
+  QueryRecipeArgs,
+  MutationCreateIngredientArgs,
+  MutationUpdateIngredientArgs,
+  MutationRemoveIngredientArgs,
+} from '../generated/graphql';
 import { Ingredient } from '../../entities/ingredient.entity';
-
 
 /**
  * This is a data source exemple which can be used with typeorm to access data.
@@ -10,7 +14,7 @@ import { Ingredient } from '../../entities/ingredient.entity';
  */
 export class IngredientProvider extends DataSource {
   public async getIngredient({ id }: QueryRecipeArgs) {
-    const ingredient = await Ingredient.findOneBy({id});
+    const ingredient = await Ingredient.findOneBy({ id });
     return ingredient;
   }
 
@@ -19,17 +23,23 @@ export class IngredientProvider extends DataSource {
     return ingredients;
   }
 
-  public async createIngredient({name}: MutationCreateIngredientArgs) {
-    const ingredient = new Ingredient()
+  public async createIngredient({ name }: MutationCreateIngredientArgs) {
+    const ingredient = new Ingredient();
     ingredient.name = name;
     await ingredient.save();
     return ingredient;
   }
 
-  public async updateIngredient({id, name}: MutationUpdateIngredientArgs) {
-    const ingredient = await Ingredient.findOneBy({id});
+  public async updateIngredient({ id, name }: MutationUpdateIngredientArgs) {
+    const ingredient = await Ingredient.findOneBy({ id });
     ingredient.name = name;
     await ingredient.save();
     return ingredient;
+  }
+
+  public async removeIngredient({ id }: MutationRemoveIngredientArgs) {
+    const ingredient = await this.getIngredient({ id });
+    await ingredient.remove();
+    return { result: 'OK' };
   }
 }

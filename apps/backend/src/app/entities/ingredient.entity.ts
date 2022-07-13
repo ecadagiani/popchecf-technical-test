@@ -17,7 +17,8 @@ export class Ingredient extends BaseEntity {
 
   @OneToMany(
     () => RecipeHasIngredient,
-    (recipeHasIngredient) => recipeHasIngredient.ingredient
+    (recipeHasIngredient) => recipeHasIngredient.ingredient,
+    { onDelete: 'CASCADE' }
   )
   recipeHasIngredient: RecipeHasIngredient[];
 }

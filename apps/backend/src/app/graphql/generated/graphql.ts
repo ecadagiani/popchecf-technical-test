@@ -42,7 +42,9 @@ export type Mutation = {
   addIngredientToRecipe?: Maybe<Recipe>;
   createIngredient?: Maybe<Ingredient>;
   createRecipe?: Maybe<Recipe>;
+  removeIngredient?: Maybe<RemoveIngredientPayload>;
   removeIngredientToRecipe?: Maybe<Recipe>;
+  removeRecipe?: Maybe<RemoveRecipePayload>;
   updateIngredient?: Maybe<Ingredient>;
   updateRecipe?: Maybe<Recipe>;
 };
@@ -64,9 +66,17 @@ export type MutationCreateRecipeArgs = {
   title: Scalars['String'];
 };
 
+export type MutationRemoveIngredientArgs = {
+  id: Scalars['ID'];
+};
+
 export type MutationRemoveIngredientToRecipeArgs = {
   id: Scalars['ID'];
   ingredientId: Scalars['ID'];
+};
+
+export type MutationRemoveRecipeArgs = {
+  id: Scalars['ID'];
 };
 
 export type MutationUpdateIngredientArgs = {
@@ -109,6 +119,16 @@ export type RecipeIngredient = {
   ingredient?: Maybe<Ingredient>;
   peopleNumber?: Maybe<Scalars['Int']>;
   quantity?: Maybe<Scalars['Int']>;
+};
+
+export type RemoveIngredientPayload = {
+  __typename?: 'RemoveIngredientPayload';
+  result?: Maybe<Scalars['String']>;
+};
+
+export type RemoveRecipePayload = {
+  __typename?: 'RemoveRecipePayload';
+  result?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -230,6 +250,8 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Recipe: ResolverTypeWrapper<Recipe>;
   RecipeIngredient: ResolverTypeWrapper<RecipeIngredient>;
+  RemoveIngredientPayload: ResolverTypeWrapper<RemoveIngredientPayload>;
+  RemoveRecipePayload: ResolverTypeWrapper<RemoveRecipePayload>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
@@ -244,6 +266,8 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Recipe: Recipe;
   RecipeIngredient: RecipeIngredient;
+  RemoveIngredientPayload: RemoveIngredientPayload;
+  RemoveRecipePayload: RemoveRecipePayload;
   String: Scalars['String'];
 }>;
 
@@ -278,11 +302,23 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateRecipeArgs, 'content' | 'title'>
   >;
+  removeIngredient?: Resolver<
+    Maybe<ResolversTypes['RemoveIngredientPayload']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationRemoveIngredientArgs, 'id'>
+  >;
   removeIngredientToRecipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
     RequireFields<MutationRemoveIngredientToRecipeArgs, 'id' | 'ingredientId'>
+  >;
+  removeRecipe?: Resolver<
+    Maybe<ResolversTypes['RemoveRecipePayload']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationRemoveRecipeArgs, 'id'>
   >;
   updateIngredient?: Resolver<
     Maybe<ResolversTypes['Ingredient']>,
@@ -359,10 +395,28 @@ export type RecipeIngredientResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type RemoveIngredientPayloadResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['RemoveIngredientPayload'] = ResolversParentTypes['RemoveIngredientPayload']
+> = ResolversObject<{
+  result?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RemoveRecipePayloadResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['RemoveRecipePayload'] = ResolversParentTypes['RemoveRecipePayload']
+> = ResolversObject<{
+  result?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Ingredient?: IngredientResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Recipe?: RecipeResolvers<ContextType>;
   RecipeIngredient?: RecipeIngredientResolvers<ContextType>;
+  RemoveIngredientPayload?: RemoveIngredientPayloadResolvers<ContextType>;
+  RemoveRecipePayload?: RemoveRecipePayloadResolvers<ContextType>;
 }>;

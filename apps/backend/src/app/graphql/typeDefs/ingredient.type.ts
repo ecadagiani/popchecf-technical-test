@@ -5,8 +5,12 @@ export const IngredientTypeDefs = gql`
     id: ID
     name: String
   }
+  type RemoveIngredientPayload {
+    result: String
+  }
   type Mutation {
     createIngredient(name: String!): Ingredient
     updateIngredient(id: ID!, name: String): Ingredient
+    removeIngredient(id: ID!): RemoveIngredientPayload
   }
 `;

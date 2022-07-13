@@ -5,6 +5,7 @@ import {
   MutationUpdateRecipeArgs,
   MutationAddIngredientToRecipeArgs,
   MutationRemoveIngredientToRecipeArgs,
+  MutationRemoveRecipeArgs,
 } from '../generated/graphql';
 import { Recipe } from '../../entities/recipe.entity';
 import { Ingredient } from '../../entities/ingredient.entity';
@@ -31,36 +32,44 @@ export class RecipesProvider extends DataSource {
     return recipes;
   }
 
-  public async createRecipe({ title, content, ingredients }: MutationCreateRecipeArgs) {
+  public async createRecipe({
+    title,
+    content,
+    ingredients,
+  }: MutationCreateRecipeArgs) {
     const recipe = new Recipe();
     recipe.title = title;
     recipe.content = content;
     await recipe.save();
-    
-    if(ingredients){
-      await Promise.all(ingredients.map(ingredient => (
-        this.addIngredientToRecipe({
-          id: recipe.id,
-          ingredientId: ingredient.id,
-          quantity: ingredient.quantity,
-          peopleNumber: ingredient.peopleNumber,
-        })
-      )));
+
+    if (ingredients) {
+      await Promise.all(
+        ingredients.map((ingredient) =>
+          this.addIngredientToRecipe({
+            id: recipe.id,
+            ingredientId: ingredient.id,
+            quantity: ingredient.quantity,
+            peopleNumber: ingredient.peopleNumber,
+          })
+        )
+      );
     }
 
     return this.getRecipe({ id: recipe.id });
   }
 
   public async updateRecipe({ id, title, content }: MutationUpdateRecipeArgs) {
-    const recipes = await Recipe.find({
-      where: { id },
-      relations: ['ingredients', 'ingredients.ingredient'],
-    });
-    const recipe = recipes[0];
+    const recipe = await this.getRecipe({ id });
     if (title) recipe.title = title;
     if (content) recipe.content = content;
     await recipe.save();
     return recipe;
+  }
+
+  public async removeRecipe({ id }: MutationRemoveRecipeArgs) {
+    const recipe = await this.getRecipe({ id });
+    await recipe.remove();
+    return { result: 'OK' };
   }
 
   public async addIngredientToRecipe({

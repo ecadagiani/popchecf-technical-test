@@ -12,6 +12,9 @@ export const RecipeTypeDefs = gql`
     content: String
     ingredients: [RecipeIngredient]
   }
+  type RemoveRecipePayload {
+    result: String
+  }
   input CreateRecipeIngredient {
     id: ID!
     quantity: Int
@@ -24,6 +27,7 @@ export const RecipeTypeDefs = gql`
       ingredients: [CreateRecipeIngredient]
     ): Recipe
     updateRecipe(id: ID!, title: String, content: String): Recipe
+    removeRecipe(id: ID!): RemoveRecipePayload
     addIngredientToRecipe(
       id: ID!
       ingredientId: ID!
