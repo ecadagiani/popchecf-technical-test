@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "a1fef059-cddd-4bfd-a31a-79d699eca92f",
+		"name": "PopChef - technical test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17027853"
+	},
+	"item": [
+		{
+			"name": "get recipes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n    recipes {\n        id\n        title\n        content\n        ingredients {\n            quantity\n            peopleNumber\n            ingredient {\n                id\n                name\n            }\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    createRecipe(\n        title: \"raclette\",\n        content: \"Un plat d'hiver\",\n        ingredients: [\n            {\n                id: \"362888ce-4987-4df7-bd09-0540432f9098\",\n                quantity: 5,\n                peopleNumber: 2\n            },\n            {\n                id: \"4695d7d5-cbc4-495a-9330-244e78c79831\"\n            }\n        ]\n    ) {\n        id\n        title\n        content\n        ingredients {\n            quantity\n            peopleNumber\n            ingredient {\n                id\n                name\n            }\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    updateRecipe(id: \"04b86bc4-b3b2-4a2a-a4ba-f531fd053b19\", title: \"Cordon bleu bleu\") {\n        id\n        title\n        content\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    removeRecipe(id: \"09b9d143-5180-4862-8ccd-f10d10c5ac84\") {\n        result\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add ingredient to recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    addIngredientToRecipe(\n        id: \"04b86bc4-b3b2-4a2a-a4ba-f531fd053b19\", \n        ingredientId: \"0f31df6b-0b26-4f2f-8053-ec6b45491ab3\",\n        quantity: 1,\n        peopleNumber: 4\n    ) {\n        id\n        title\n        content\n        ingredients {\n            quantity\n            peopleNumber\n            ingredient {\n                id\n                name\n            }\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove ingredient to recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    removeIngredientToRecipe(\n        id: \"04b86bc4-b3b2-4a2a-a4ba-f531fd053b19\", \n        ingredientId: \"0f31df6b-0b26-4f2f-8053-ec6b45491ab3\"\n    ) {\n        id\n        title\n        content\n        ingredients {\n            quantity\n            peopleNumber\n            ingredient {\n                id\n                name\n            }\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get ingredients",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n    ingredients {\n        id\n        name\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create ingredient",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    createIngredient(name: \"poivre\") {\n        id\n        name\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update ingredient",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    updateIngredient(id: \"0f31df6b-0b26-4f2f-8053-ec6b45491ab3\", name: \"Poivron rouge\") {\n        id\n        name\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove ingredient",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    removeIngredient(id: \"362888ce-4987-4df7-bd09-0540432f9098\") {\n        result\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/graphql",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server_url",
+			"value": "http://localhost:3333",
+			"type": "string"
+		}
+	]
+}
