@@ -33,17 +33,17 @@ export type Ingredient = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addIngredient?: Maybe<Recipe>;
+  addIngredientToRecipe?: Maybe<Recipe>;
   createIngredient?: Maybe<Ingredient>;
   createRecipe?: Maybe<Recipe>;
-  removeIngredient?: Maybe<Recipe>;
+  removeIngredientToRecipe?: Maybe<Recipe>;
   updateIngredient?: Maybe<Ingredient>;
   updateRecipe?: Maybe<Recipe>;
 };
 
-export type MutationAddIngredientArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  ingredientId?: InputMaybe<Scalars['ID']>;
+export type MutationAddIngredientToRecipeArgs = {
+  id: Scalars['ID'];
+  ingredientId: Scalars['ID'];
   peopleNumber?: InputMaybe<Scalars['Int']>;
   quantity?: InputMaybe<Scalars['Int']>;
 };
@@ -53,15 +53,13 @@ export type MutationCreateIngredientArgs = {
 };
 
 export type MutationCreateRecipeArgs = {
-  content?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  content: Scalars['String'];
+  title: Scalars['String'];
 };
 
-export type MutationRemoveIngredientArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  ingredientId?: InputMaybe<Scalars['ID']>;
-  peopleNumber?: InputMaybe<Scalars['Int']>;
-  quantity?: InputMaybe<Scalars['Int']>;
+export type MutationRemoveIngredientToRecipeArgs = {
+  id: Scalars['ID'];
+  ingredientId: Scalars['ID'];
 };
 
 export type MutationUpdateIngredientArgs = {
@@ -70,9 +68,9 @@ export type MutationUpdateIngredientArgs = {
 };
 
 export type MutationUpdateRecipeArgs = {
-  content?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  title?: InputMaybe<Scalars['String']>;
+  content: Scalars['String'];
+  id: Scalars['ID'];
+  title: Scalars['String'];
 };
 
 export type Query = {
@@ -253,11 +251,11 @@ export type MutationResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = ResolversObject<{
-  addIngredient?: Resolver<
+  addIngredientToRecipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
-    Partial<MutationAddIngredientArgs>
+    RequireFields<MutationAddIngredientToRecipeArgs, 'id' | 'ingredientId'>
   >;
   createIngredient?: Resolver<
     Maybe<ResolversTypes['Ingredient']>,
@@ -269,13 +267,13 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
-    Partial<MutationCreateRecipeArgs>
+    RequireFields<MutationCreateRecipeArgs, 'content' | 'title'>
   >;
-  removeIngredient?: Resolver<
+  removeIngredientToRecipe?: Resolver<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
-    Partial<MutationRemoveIngredientArgs>
+    RequireFields<MutationRemoveIngredientToRecipeArgs, 'id' | 'ingredientId'>
   >;
   updateIngredient?: Resolver<
     Maybe<ResolversTypes['Ingredient']>,
@@ -287,7 +285,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Recipe']>,
     ParentType,
     ContextType,
-    Partial<MutationUpdateRecipeArgs>
+    RequireFields<MutationUpdateRecipeArgs, 'content' | 'id' | 'title'>
   >;
 }>;
 

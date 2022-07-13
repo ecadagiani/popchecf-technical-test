@@ -1,4 +1,10 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+} from 'typeorm';
 import { RecipeHasIngredient } from './recipeHasIngredient.entity';
 
 @Entity('recipes')
@@ -12,6 +18,9 @@ export class Recipe extends BaseEntity {
   @Column()
   content: string;
 
-  @OneToMany(() => RecipeHasIngredient, recipeHasIngredient => recipeHasIngredient.ingredient)
+  @OneToMany(
+    () => RecipeHasIngredient,
+    (recipeHasIngredient) => recipeHasIngredient.recipe
+  )
   ingredients: RecipeHasIngredient[];
 }

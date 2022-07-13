@@ -1,4 +1,10 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+} from 'typeorm';
 import { Recipe } from './recipe.entity';
 import { Ingredient } from './ingredient.entity';
 
@@ -13,11 +19,9 @@ export class RecipeHasIngredient extends BaseEntity {
   @Column()
   peopleNumber?: number;
 
-  @ManyToOne( () => Ingredient, ingredient => ingredient.recipeHasIngredient)
-  @JoinTable()
-  ingredient: Ingredient
+  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeHasIngredient)
+  ingredient: Ingredient;
 
-  @ManyToOne( () => Recipe, recipe => recipe.ingredients)
-  @JoinTable()
-  recipe: Recipe
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  recipe: Recipe;
 }

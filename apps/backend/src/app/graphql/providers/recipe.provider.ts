@@ -1,5 +1,11 @@
 import { DataSource } from 'apollo-datasource';
-import { QueryRecipeArgs, MutationCreateRecipeArgs, MutationUpdateRecipeArgs, MutationAddIngredientArgs, MutationRemoveIngredientArgs } from '../generated/graphql';
+import {
+  QueryRecipeArgs,
+  MutationCreateRecipeArgs,
+  MutationUpdateRecipeArgs,
+  MutationAddIngredientToRecipeArgs,
+  MutationRemoveIngredientToRecipeArgs,
+} from '../generated/graphql';
 import { Recipe } from '../../entities/recipe.entity';
 import { Ingredient } from '../../entities/ingredient.entity';
 import { RecipeHasIngredient } from '../../entities/recipeHasIngredient.entity';
@@ -45,18 +51,13 @@ export class RecipesProvider extends DataSource {
     return recipe;
   }
 
-  public async addIngredient({
+  public async addIngredientToRecipe({
     id,
     ingredientId,
     quantity,
     peopleNumber,
-  }: MutationAddIngredientArgs) {
-    // todo: bug: ingredient is not added to recipe
-    const recipes = await Recipe.find({
-      where: { id },
-      relations: ['ingredients', 'ingredients.ingredient'],
-    });
-    const recipe = recipes[0];
+  }: MutationAddIngredientToRecipeArgs) {
+    const recipe = await this.getRecipe({ id });
     const ingredient = await Ingredient.findOneBy({ id: ingredientId });
 
     const recipeIngredient = new RecipeHasIngredient();
@@ -66,15 +67,13 @@ export class RecipesProvider extends DataSource {
     if (peopleNumber) recipeIngredient.peopleNumber = peopleNumber;
 
     await recipeIngredient.save();
-    recipe.ingredients.push(recipeIngredient);
-    await recipe.save();
-    console.log(recipe);
-
     return this.getRecipe({ id });
   }
 
-  public async removeIngredient({ id, ingredientId }: MutationRemoveIngredientArgs) {
-    // toto: not tested
+  public async removeIngredientToRecipe({
+    id,
+    ingredientId,
+  }: MutationRemoveIngredientToRecipeArgs) {
     const recipes = await Recipe.find({
       where: { id },
       relations: ['ingredients', 'ingredients.ingredient'],
